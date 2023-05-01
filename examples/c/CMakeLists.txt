@@ -34,10 +34,6 @@ foreach(example ${LIEF_C_EXAMPLES})
     $<TARGET_PROPERTY:LIB_LIEF,INCLUDE_DIRECTORIES>)
 
   set(LIEF_EXAMPLES_C_FLAGS)
-  CHECK_C_COMPILER_FLAG("-ansi" HAS_ANSI)
-  if (HAS_ANSI)
-    set(LIEF_EXAMPLES_C_FLAGS ${LIEF_EXAMPLES_C_FLAGS} -ansi)
-  endif()
 
   set_property(TARGET "${output_target}" PROPERTY C_STANDARD          99)
   set_property(TARGET "${output_target}" PROPERTY C_STANDARD_REQUIRED ON)
