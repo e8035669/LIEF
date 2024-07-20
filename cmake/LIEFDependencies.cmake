@@ -40,6 +40,7 @@ if(NOT LIEF_OPT_MBEDTLS_EXTERNAL)
   set(SOURCE_DIR mbed_src)
   set(MBEDTLS_SOURCE_DIR "${SOURCE_DIR}")
   set(MBEDTLS_INCLUDE_DIRS "${CMAKE_CURRENT_BINARY_DIR}/${SOURCE_DIR}/include;${CMAKE_CURRENT_BINARY_DIR}/${SOURCE_DIR}/library")
+  set(MBEDTLS_PATCH_COMMAND patch --verbose -Np1 -d ${CMAKE_CURRENT_BINARY_DIR}/${SOURCE_DIR} -i ${THIRD_PARTY_DIRECTORY}/907a367b5035ab120095c325b48fdf90b04a5081.patch)
 
   set(mbedtls_src_crypto
     "${MBEDTLS_SOURCE_DIR}/library/aes.c"
@@ -154,6 +155,7 @@ if(NOT LIEF_OPT_MBEDTLS_EXTERNAL)
     URL               ${MBED_TLS_URL}
     URL_HASH          ${MBED_TLS_SHA256}
     UPDATE_COMMAND    "" # repetitive update are a pain
+    PATCH_COMMAND     ${MBEDTLS_PATCH_COMMAND}
     BUILD_BYPRODUCTS  ${mbedtls_src_crypto} ${mbedtls_src_x509} ${mbedtls_src_tls})
 
 endif()
