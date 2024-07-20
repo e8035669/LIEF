@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2023 R. Thomas
- * Copyright 2017 - 2023 Quarkslab
+/* Copyright 2017 - 2024 R. Thomas
+ * Copyright 2017 - 2024 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <algorithm>
 #include <memory>
 
 #include "logging.hpp"
@@ -172,7 +171,9 @@ ok_error_t Parser::build_fat() {
       continue;
     }
 
-    std::unique_ptr<Binary> bin = BinaryParser::parse(std::move(macho_data), offset, config_);
+    std::unique_ptr<Binary> bin = BinaryParser::parse(
+        std::move(macho_data), offset, config_
+    );
     if (bin == nullptr) {
       LIEF_ERR("Can't parse the binary at the index #{:d}", i);
       continue;
@@ -195,7 +196,9 @@ ok_error_t Parser::build() {
       LIEF_WARN("Errors while parsing the Fat MachO");
     }
   } else { // fit binary
+    const size_t original_size = stream_->size();
     std::unique_ptr<Binary> bin = BinaryParser::parse(std::move(stream_), 0, config_);
+    bin->original_size_ = original_size;
     if (bin == nullptr) {
       return make_error_code(lief_errors::parsing_error);
     }
@@ -212,7 +215,9 @@ ok_error_t Parser::undo_reloc_bindings(uintptr_t base_address) {
   for (std::unique_ptr<Binary>& bin : binaries_) {
     for (Relocation& reloc : bin->relocations()) {
       if (RelocationFixup::classof(reloc)) {
-        auto& fixup = static_cast<RelocationFixup&>(reloc);
+        /* TODO(romain): We should support fixup
+         * auto& fixup = static_cast<RelocationFixup&>(reloc);
+         */
       }
       else if (RelocationDyld::classof(reloc)) {
         span<const uint8_t> content = bin->get_content_from_virtual_address(reloc.address(), sizeof(uintptr_t));
@@ -226,7 +231,7 @@ ok_error_t Parser::undo_reloc_bindings(uintptr_t base_address) {
     }
     if (const DyldInfo* info = bin->dyld_info()) {
       for (const DyldBindingInfo& bindinfo : info->bindings()) {
-        if (bindinfo.binding_class() == BINDING_CLASS::BIND_CLASS_STANDARD) {
+        if (bindinfo.binding_class() == DyldBindingInfo::CLASS::STANDARD) {
           bin->patch_address(bindinfo.address(), 0, sizeof(uintptr_t));
         }
       }

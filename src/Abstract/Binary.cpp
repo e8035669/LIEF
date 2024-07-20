@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2023 R. Thomas
- * Copyright 2017 - 2023 Quarkslab
+/* Copyright 2017 - 2024 R. Thomas
+ * Copyright 2017 - 2024 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,21 +16,23 @@
 #include "LIEF/Abstract/Binary.hpp"
 
 #include "LIEF/Visitor.hpp"
+
 #include "logging.hpp"
+#include "frozen.hpp"
 
 #include "LIEF/Abstract/Section.hpp"
 #include "LIEF/Abstract/Symbol.hpp"
+#include "LIEF/Abstract/DebugInfo.hpp"
 
 namespace LIEF {
+
+Binary::Binary(FORMATS fmt) :
+  format_{fmt}
+{}
+
 Binary::Binary() = default;
 
 Binary::~Binary() = default;
-Binary& Binary::operator=(const Binary&) = default;
-Binary::Binary(const Binary&) = default;
-
-EXE_FORMATS Binary::format() const {
-  return format_;
-}
 
 Header Binary::header() const {
   return get_abstract_header();
@@ -130,5 +132,37 @@ std::ostream& operator<<(std::ostream& os, const Binary& binary) {
   return os;
 }
 
+const char* to_string(Binary::VA_TYPES e) {
+  #define ENTRY(X) std::pair(Binary::VA_TYPES::X, #X)
+  STRING_MAP enums2str {
+    ENTRY(AUTO),
+    ENTRY(RVA),
+    ENTRY(VA),
+  };
+  #undef ENTRY
 
+  if (auto it = enums2str.find(e); it != enums2str.end()) {
+    return it->second;
+  }
+
+  return "UNKNOWN";
+}
+
+const char* to_string(Binary::FORMATS e) {
+  #define ENTRY(X) std::pair(Binary::FORMATS::X, #X)
+  STRING_MAP enums2str {
+    ENTRY(UNKNOWN),
+    ENTRY(ELF),
+    ENTRY(PE),
+    ENTRY(MACHO),
+    ENTRY(OAT),
+  };
+  #undef ENTRY
+
+  if (auto it = enums2str.find(e); it != enums2str.end()) {
+    return it->second;
+  }
+
+  return "UNKNOWN";
+}
 }

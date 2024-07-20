@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2023 R. Thomas
- * Copyright 2017 - 2023 Quarkslab
+/* Copyright 2017 - 2024 R. Thomas
+ * Copyright 2017 - 2024 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 #ifndef LIEF_SYMBOL_VISIBILITY_H
 #define LIEF_SYMBOL_VISIBILITY_H
 
-// Thanks to https://github.com/aguinet/dragonffi/blob/40f3fecb9530a2ef840f63882c5284ea5e8dc9e8/include/dffi/exports.h
+/* Thanks to https://github.com/aguinet/dragonffi/blob/40f3fecb9530a2ef840f63882c5284ea5e8dc9e8/include/dffi/exports.h */
 #if defined _WIN32 || defined __CYGWIN__
   #define LIEF_HELPER_IMPORT __declspec(dllimport)
   #define LIEF_HELPER_EXPORT __declspec(dllexport)

@@ -1,5 +1,5 @@
-/* Copyright 2017 - 2023 R. Thomas
- * Copyright 2017 - 2023 Quarkslab
+/* Copyright 2017 - 2024 R. Thomas
+ * Copyright 2017 - 2024 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ namespace PE {
 //! This structure is used to tweak the PE Parser (PE::Parser)
 struct LIEF_API ParserConfig {
   static ParserConfig all() {
-    static ParserConfig DEFAULT;
+    static const ParserConfig DEFAULT;
     return DEFAULT;
   }
 

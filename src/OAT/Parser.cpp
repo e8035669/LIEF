@@ -1,5 +1,5 @@
-/* Copyright 2021 - 2023 R. Thomas
- * Copyright 2021 - 2023 Quarkslab
+/* Copyright 2021 - 2024 R. Thomas
+ * Copyright 2021 - 2024 Quarkslab
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ std::unique_ptr<Binary> Parser::parse(std::vector<uint8_t> data) {
 Parser::Parser(std::vector<uint8_t> data) {
   stream_    = std::make_unique<VectorStream>(std::move(data));
   binary_    = std::unique_ptr<Binary>(new Binary{});
-  count_mtd_ = ELF::DYNSYM_COUNT_METHODS::COUNT_AUTO;
+  config_.count_mtd = ELF::ParserConfig::DYNSYM_COUNT::AUTO;
 }
 
 Parser::Parser(const std::string& file) {
@@ -90,7 +90,7 @@ Parser::Parser(const std::string& file) {
     stream_ = std::make_unique<VectorStream>(std::move(*s));
   }
   binary_    = std::unique_ptr<Binary>(new Binary{});
-  count_mtd_ = ELF::DYNSYM_COUNT_METHODS::COUNT_AUTO;
+  config_.count_mtd = ELF::ParserConfig::DYNSYM_COUNT::AUTO;
 }
 
 
